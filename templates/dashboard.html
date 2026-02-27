@@ -43,7 +43,8 @@
 <script>
 let ctx = document.getElementById("emgChart");
 let data = Array(100).fill(0);
-let threshold = 0.7;
+let windowBuffer = [];
+let threshold = 0.6;
 
 let chart = new Chart(ctx, {
     type: "line",
@@ -54,7 +55,7 @@ let chart = new Chart(ctx, {
             data: data,
             borderColor: "#00ff99",
             borderWidth: 2,
-            tension: 0.3
+            tension: 0.2
         }]
     },
     options: {
@@ -72,60 +73,59 @@ function updateGraph(value){
     chart.update();
 }
 
-// REALISTIC EMG GENERATOR
-function generateSignal(){
-    let baseNoise = Math.random() * 0.3;
+// REALISTIC BURST GENERATOR
+let burstMode = false;
+let burstTimer = 0;
 
-    // Occasionally generate spike
-    if(Math.random() > 0.95){
-        baseNoise = 0.8 + Math.random() * 0.2;
+function generateSignal(){
+
+    let value;
+
+    if(burstMode){
+        value = 0.7 + Math.random()*0.3;
+        burstTimer--;
+        if(burstTimer <= 0){
+            burstMode = false;
+        }
+    } else {
+        value = Math.random()*0.25;
+        if(Math.random() > 0.98){
+            burstMode = true;
+            burstTimer = 15; // burst lasts 15 cycles
+        }
     }
 
-    updateGraph(baseNoise);
-    checkSignal(baseNoise);
+    updateGraph(value);
+
+    windowBuffer.push(value);
+    if(windowBuffer.length > 20){
+        windowBuffer.shift();
+    }
+
+    analyzeSignal();
 }
 
-function checkSignal(value){
+function analyzeSignal(){
+    if(windowBuffer.length < 20) return;
+
+    let sum = 0;
+    for(let i=0;i<windowBuffer.length;i++){
+        sum += windowBuffer[i]*windowBuffer[i];
+    }
+    let rms = Math.sqrt(sum/windowBuffer.length);
+
     let box = document.getElementById("resultBox");
 
-    if(value > threshold){
+    if(rms > threshold){
         box.innerHTML = "⚠ MOMENT ZERO DETECTED";
         box.style.color = "red";
-        box.style.animation = "blink 1s infinite";
     } else {
         box.innerHTML = "Stable State";
         box.style.color = "#00ff99";
-        box.style.animation = "none";
     }
 }
 
-// Auto signal
 setInterval(generateSignal, 200);
-
-
-// FILE UPLOAD (REAL BACKEND ML)
-document.getElementById("uploadForm").onsubmit = async function(e){
-    e.preventDefault();
-
-    let formData = new FormData(this);
-
-    let response = await fetch("/predict_file", {
-        method: "POST",
-        body: formData
-    });
-
-    let result = await response.json();
-
-    let box = document.getElementById("resultBox");
-
-    if(result.result == 1){
-        box.innerHTML = "⚠ MOMENT ZERO DETECTED (File Analysis)";
-        box.style.color = "red";
-    } else {
-        box.innerHTML = "Stable State (File Analysis)";
-        box.style.color = "#00ff99";
-    }
-};
 </script>
    
 </body>
