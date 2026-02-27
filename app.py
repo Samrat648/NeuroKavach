@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import numpy as np
 import pandas as pd
+import os
 
 app = Flask(__name__)
 
@@ -27,31 +28,23 @@ def predict_file():
     if file.filename == "":
         return jsonify({"error": "No file selected"}), 400
 
-    try:
-        df = pd.read_csv(file)
-        df = df.select_dtypes(include=[np.number])
+    df = pd.read_csv(file)
+    df = df.select_dtypes(include=[np.number])
 
-        if df.empty:
-            return jsonify({"error": "No numeric data found"}), 400
+    if df.empty:
+        return jsonify({"error": "No numeric data found"}), 400
 
-        values = df.values.flatten()
-        rms = np.sqrt(np.mean(np.square(values)))
+    values = df.values.flatten()
+    rms = np.sqrt(np.mean(np.square(values)))
 
-        state = "Moment Zero" if rms > THRESHOLD else "Stable"
+    state = "Moment Zero" if rms > THRESHOLD else "Stable"
 
-        return jsonify({"state": state, "rms": float(rms)})
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    return jsonify({"state": state, "rms": float(rms)})
 
 
 @app.route("/predict_live", methods=["POST"])
 def predict_live():
     data = request.json
-
-    if "values" not in data:
-        return jsonify({"error": "No values sent"}), 400
-
     values = np.array(data["values"])
 
     rms = np.sqrt(np.mean(np.square(values)))
@@ -61,4 +54,5 @@ def predict_live():
 
 
 if __name__ == "__main__":
-    app.run()
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
