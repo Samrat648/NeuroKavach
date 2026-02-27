@@ -10,13 +10,13 @@
 
 <div class="main-container">
 
-    <!-- LEFT PANEL -->
+    <!-- LEFT SIDE : WAVE -->
     <div class="left-panel">
         <h2>Live EMG Signal</h2>
         <canvas id="emgChart"></canvas>
     </div>
 
-    <!-- RIGHT PANEL -->
+    <!-- RIGHT SIDE : CONTROL -->
     <div class="right-panel">
         <h2>ML Control Panel</h2>
 
@@ -34,22 +34,21 @@
             <button onclick="stopLive()">Stop</button>
         </div>
 
-        <div class="result" id="resultBox">
-            Waiting for signal...
+        <div class="result">
+            RMS: <span id="rmsValue">0</span><br>
+            State: <span id="stateValue">Waiting...</span>
         </div>
     </div>
 
 </div>
 
 <script>
-let ctx = document.getElementById("emgChart");
 
+let ctx = document.getElementById("emgChart");
 let data = Array(100).fill(0);
 let windowBuffer = [];
-let threshold = 0.6;
 let liveInterval = null;
 
-// Chart setup
 let chart = new Chart(ctx, {
     type: "line",
     data: {
@@ -64,7 +63,6 @@ let chart = new Chart(ctx, {
     },
     options: {
         animation: false,
-        responsive: true,
         scales: {
             y: { min: 0, max: 1 }
         }
@@ -77,26 +75,12 @@ function updateGraph(value){
     chart.update();
 }
 
-// Realistic burst generator
-let burstMode = false;
-let burstTimer = 0;
-
 function generateSignal(){
+    let value = Math.random() * 0.2;
 
-    let value;
-
-    if(burstMode){
-        value = 0.7 + Math.random()*0.3;
-        burstTimer--;
-        if(burstTimer <= 0){
-            burstMode = false;
-        }
-    } else {
-        value = Math.random()*0.25;
-        if(Math.random() > 0.98){
-            burstMode = true;
-            burstTimer = 15;
-        }
+    // Create burst occasionally
+    if(Math.random() > 0.97){
+        value = 0.8 + Math.random()*0.2;
     }
 
     updateGraph(value);
@@ -106,30 +90,30 @@ function generateSignal(){
         windowBuffer.shift();
     }
 
-    analyzeSignal();
+    sendLiveToBackend();
 }
 
-function analyzeSignal(){
-    if(windowBuffer.length < 20) return;
+function sendLiveToBackend(){
+    fetch("/predict_live", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            values: windowBuffer
+        })
+    })
+    .then(res => res.json())
+    .then(result => {
+        document.getElementById("rmsValue").innerText = result.rms.toFixed(3);
+        document.getElementById("stateValue").innerText = result.state;
 
-    let sum = 0;
-    for(let i=0;i<windowBuffer.length;i++){
-        sum += windowBuffer[i]*windowBuffer[i];
-    }
-    let rms = Math.sqrt(sum/windowBuffer.length);
-
-    let box = document.getElementById("resultBox");
-
-    if(rms > threshold){
-        box.innerHTML = "⚠ MOMENT ZERO DETECTED";
-        box.style.color = "red";
-    } else {
-        box.innerHTML = "Stable State";
-        box.style.color = "#00ff99";
-    }
+        if(result.state === "Moment Zero"){
+            document.getElementById("stateValue").style.color = "red";
+        } else {
+            document.getElementById("stateValue").style.color = "#00ff99";
+        }
+    });
 }
 
-// Start / Stop control
 function startLive(){
     if(liveInterval === null){
         liveInterval = setInterval(generateSignal, 200);
@@ -141,29 +125,35 @@ function stopLive(){
     liveInterval = null;
 }
 
-// File Upload Handler
-document.getElementById("uploadForm").onsubmit = async function(e){
+// File upload
+document.getElementById("uploadForm").onsubmit = function(e){
     e.preventDefault();
 
     let formData = new FormData(this);
 
-    let response = await fetch("/predict_file", {
+    fetch("/predict_file", {
         method: "POST",
         body: formData
+    })
+    .then(res => res.json())
+    .then(result => {
+
+        if(result.error){
+            alert(result.error);
+            return;
+        }
+
+        document.getElementById("rmsValue").innerText = result.rms.toFixed(3);
+        document.getElementById("stateValue").innerText = result.state;
+
+        if(result.state === "Moment Zero"){
+            document.getElementById("stateValue").style.color = "red";
+        } else {
+            document.getElementById("stateValue").style.color = "#00ff99";
+        }
     });
-
-    let result = await response.json();
-
-    let box = document.getElementById("resultBox");
-
-    if(result.result == 1){
-        box.innerHTML = "⚠ MOMENT ZERO DETECTED (CSV)";
-        box.style.color = "red";
-    } else {
-        box.innerHTML = "Stable State (CSV)";
-        box.style.color = "#00ff99";
-    }
 };
+
 </script>
 
 </body>
