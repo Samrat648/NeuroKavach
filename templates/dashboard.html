@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NeuroKavach Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="main-container">
+
+    <!-- LEFT SIDE: LIVE WAVE -->
+    <div class="left-panel">
+        <h2>Live EMG Signal</h2>
+        <canvas id="emgChart"></canvas>
+    </div>
+
+    <!-- RIGHT SIDE: CONTROLS -->
+    <div class="right-panel">
+        <h2>ML Control Panel</h2>
+
+        <div class="card">
+            <h3>Upload EMG CSV</h3>
+            <form id="uploadForm">
+                <input type="file" name="file" required>
+                <button type="submit">Analyze File</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>Live ESP Mode</h3>
+            <button onclick="sendLive()">Simulate ESP Data</button>
+        </div>
+
+        <div class="result" id="resultBox">
+            Waiting for signal...
+        </div>
+    </div>
+
+</div>
+
+<script>
+let ctx = document.getElementById("emgChart");
+let data = Array(100).fill(0);
+let threshold = 0.7;
+
+let chart = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: Array(100).fill(""),
+        datasets: [{
+            label: "EMG Signal",
+            data: data,
+            borderColor: "#00ff99",
+            borderWidth: 2,
+            tension: 0.3
+        }]
+    },
+    options: {
+        animation: false,
+        responsive: true,
+        scales: {
+            y: { min: 0, max: 1 }
+        }
+    }
+});
+
+function updateGraph(value){
+    data.shift();
+    data.push(value);
+    chart.update();
+}
+
+// REALISTIC EMG GENERATOR
+function generateSignal(){
+    let baseNoise = Math.random() * 0.3;
+
+    // Occasionally generate spike
+    if(Math.random() > 0.95){
+        baseNoise = 0.8 + Math.random() * 0.2;
+    }
+
+    updateGraph(baseNoise);
+    checkSignal(baseNoise);
+}
+
+function checkSignal(value){
+    let box = document.getElementById("resultBox");
+
+    if(value > threshold){
+        box.innerHTML = "⚠ MOMENT ZERO DETECTED";
+        box.style.color = "red";
+        box.style.animation = "blink 1s infinite";
+    } else {
+        box.innerHTML = "Stable State";
+        box.style.color = "#00ff99";
+        box.style.animation = "none";
+    }
+}
+
+// Auto signal
+setInterval(generateSignal, 200);
+
+
+// FILE UPLOAD (REAL BACKEND ML)
+document.getElementById("uploadForm").onsubmit = async function(e){
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    let response = await fetch("/predict_file", {
+        method: "POST",
+        body: formData
+    });
+
+    let result = await response.json();
+
+    let box = document.getElementById("resultBox");
+
+    if(result.result == 1){
+        box.innerHTML = "⚠ MOMENT ZERO DETECTED (File Analysis)";
+        box.style.color = "red";
+    } else {
+        box.innerHTML = "Stable State (File Analysis)";
+        box.style.color = "#00ff99";
+    }
+};
+</script>
+   
+</body>
+</html>
