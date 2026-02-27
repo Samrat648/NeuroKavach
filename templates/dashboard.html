@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard</title>
+    <title>NeuroKavach Dashboard</title>
     <link rel="stylesheet" href="/static/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -9,13 +9,15 @@
 
 <div class="container">
 
+    <!-- LEFT SIDE -->
     <div class="left">
-        <h2>Live EMG Signal</h2>
+        <h2>EMG Signal Wave</h2>
         <canvas id="emgChart"></canvas>
     </div>
 
+    <!-- RIGHT SIDE -->
     <div class="right">
-        <h2>ML Control Panel</h2>
+        <h2>Control Panel</h2>
 
         <form id="uploadForm" enctype="multipart/form-data">
             <input type="file" name="file" required>
@@ -28,68 +30,86 @@
         <button onclick="stopLive()">Stop</button>
 
         <h3>RMS: <span id="rmsValue">0</span></h3>
-        <h3>State: <span id="stateValue">Waiting</span></h3>
+        <h3>State: <span id="stateValue">Waiting...</span></h3>
     </div>
 
 </div>
 
 <script>
 
+// ================= GRAPH SETUP =================
+
 let ctx = document.getElementById("emgChart");
-let data = Array(100).fill(0);
-let buffer = [];
+let graphData = Array(200).fill(0);
+let liveBuffer = [];
 let interval = null;
 
 let chart = new Chart(ctx, {
     type: "line",
     data: {
-        labels: Array(100).fill(""),
+        labels: Array(200).fill(""),
         datasets: [{
             label: "EMG",
-            data: data,
-            borderColor: "lime",
+            data: graphData,
+            borderColor: "#00ff99",
             borderWidth: 2,
             tension: 0.2
         }]
     },
     options: {
         animation: false,
-        scales: { y: { min: 0, max: 1 } }
+        scales: {
+            y: { min: 0, max: 1 }
+        }
     }
 });
 
 function updateGraph(val){
-    data.shift();
-    data.push(val);
+    graphData.shift();
+    graphData.push(val);
     chart.update();
 }
 
+function loadCSVGraph(values){
+    graphData = Array(200).fill(0);
+    values.forEach(v => updateGraph(v));
+}
+
+// ================= LIVE MODE =================
+
 function generateSignal(){
     let val = Math.random()*0.2;
+
     if(Math.random() > 0.97){
         val = 0.8 + Math.random()*0.2;
     }
 
     updateGraph(val);
 
-    buffer.push(val);
-    if(buffer.length > 20){
-        buffer.shift();
+    liveBuffer.push(val);
+    if(liveBuffer.length > 20){
+        liveBuffer.shift();
     }
 
-    sendLive();
+    sendLiveData();
 }
 
-function sendLive(){
+function sendLiveData(){
     fetch("/predict_live", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({values: buffer})
+        body: JSON.stringify({values: liveBuffer})
     })
     .then(res => res.json())
     .then(data => {
         document.getElementById("rmsValue").innerText = data.rms.toFixed(3);
         document.getElementById("stateValue").innerText = data.state;
+
+        if(data.state === "Moment Zero"){
+            document.getElementById("stateValue").style.color = "red";
+        } else {
+            document.getElementById("stateValue").style.color = "#00ff99";
+        }
     });
 }
 
@@ -104,6 +124,8 @@ function stopLive(){
     interval = null;
 }
 
+// ================= CSV MODE =================
+
 document.getElementById("uploadForm").onsubmit = function(e){
     e.preventDefault();
 
@@ -115,12 +137,24 @@ document.getElementById("uploadForm").onsubmit = function(e){
     })
     .then(res => res.json())
     .then(data => {
+
         if(data.error){
             alert(data.error);
             return;
         }
+
         document.getElementById("rmsValue").innerText = data.rms.toFixed(3);
         document.getElementById("stateValue").innerText = data.state;
+
+        if(data.state === "Moment Zero"){
+            document.getElementById("stateValue").style.color = "red";
+        } else {
+            document.getElementById("stateValue").style.color = "#00ff99";
+        }
+
+        if(data.values){
+            loadCSVGraph(data.values);
+        }
     });
 };
 
