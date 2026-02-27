@@ -71,8 +71,10 @@ function updateGraph(val){
 }
 
 function loadCSVGraph(values){
-    graphData = Array(200).fill(0);
-    values.forEach(v => updateGraph(v));
+    graphData = values.slice(0,200);
+    chart.data.datasets[0].data = graphData;
+    chart.update();
+
 }
 
 // ================= LIVE MODE =================
