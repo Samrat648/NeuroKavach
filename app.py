@@ -14,40 +14,34 @@ def home():
 def dashboard():
     return render_template("dashboard.html")
 
-# MODE 1: FILE UPLOAD
+
+# MODE 1: FILE UPLOAD ML
 @app.route("/predict_file", methods=["POST"])
 def predict_file():
-    try:
-        file = request.files["file"]
-        df = pd.read_csv(file)
+    file = request.files["file"]
+    df = pd.read_csv(file)
 
-        if df.shape[1] < 3:
-            return jsonify({"error": "CSV must have at least 3 columns"}), 400
+    # Take first 3 numeric columns
+    features = df.mean().values[:3]
 
-        features = [df.mean().values[:3]]
-        prediction = model.predict(features)[0]
+    prediction = model.predict([features])
 
-        return jsonify({"result": int(prediction)})
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    return jsonify({"result": int(prediction[0])})
 
 
-# MODE 2: LIVE ESP DATA
+# MODE 2: LIVE SIGNAL (SYNCED WITH GRAPH)
 @app.route("/predict_live", methods=["POST"])
 def predict_live():
-    try:
-        data = request.json["values"]
+    data = request.json
+    values = data["values"]
 
-        if len(data) < 3:
-            return jsonify({"error": "Need at least 3 values"}), 400
+    # Calculate RMS of signal
+    rms = np.sqrt(np.mean(np.square(values)))
 
-        prediction = model.predict([data[:3]])[0]
-
-        return jsonify({"result": int(prediction)})
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    if rms > 0.7:
+        return jsonify({"result": 1, "rms": float(rms)})
+    else:
+        return jsonify({"result": 0, "rms": float(rms)})
 
 
 if __name__ == "__main__":
