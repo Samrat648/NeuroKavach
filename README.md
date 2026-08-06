@@ -1,8 +1,10 @@
 <h1 align="center">NeuroKavach</h1>
 
+<p align="center">
 ![Status](https://img.shields.io/badge/Status-Concept%20Stage-blue)
 ![Award](https://img.shields.io/badge/Idea%20Manthan-2nd%20Place-success)
 ![Domain](https://img.shields.io/badge/Domain-Digital%20Health-orange)
+</p>
 
 <p align="center">
 AI-assisted wearable concept for early intervention during <b>Obsessive-Compulsive Disorder (OCD)</b> episodes using multimodal physiological sensing, embedded AI, and real-time haptic feedback.
