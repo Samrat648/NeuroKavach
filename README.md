@@ -1,9 +1,9 @@
 <h1 align="center">NeuroKavach</h1>
 
 <p align="center">
-![Status](https://img.shields.io/badge/Status-Concept%20Stage-blue)
-![Award](https://img.shields.io/badge/Idea%20Manthan-2nd%20Place-success)
-![Domain](https://img.shields.io/badge/Domain-Digital%20Health-orange)
+  <img src="https://img.shields.io/badge/Status-Concept%20Stage-0A66C2" alt="Status">
+  <img src="https://img.shields.io/badge/Award-🥈%202nd%20Place-success" alt="Award">
+  <img src="https://img.shields.io/badge/Domain-Digital%20Health-6A5ACD" alt="Domain">
 </p>
 
 <p align="center">
