@@ -1,9 +1,3 @@
-# NeuroKavach
-
-<p align="center">
-  <img src="media/logo.png" alt="NeuroKavach Logo" width="180"/>
-</p>
-
 <h1 align="center">NeuroKavach</h1>
 
 <p align="center">
