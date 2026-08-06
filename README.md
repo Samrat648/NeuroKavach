@@ -43,13 +43,13 @@ AI-assisted wearable concept for early intervention during <b>Obsessive-Compulsi
 ## System Architecture
 
 <p align="center">
-<img src="media/architecture.png" width="900">
+<img src="Documentations/architecture.png" width="900">
 </p>
 
 ## Proposed Workflow
 
 <p align="center">
-<img src="media/workflow.png" width="900">
+<img src="Documentations/workflow.png" width="900">
 </p>
 
 ---
@@ -99,7 +99,7 @@ NeuroKavach explores whether wearable physiological sensing and Edge AI can iden
 # Proposed Workflow
 
 <p align="center">
-<img src="media/workflow.png" width="850">
+<img src="Documentations/workflow.png" width="850">
 </p>
 
 ---
@@ -108,7 +108,7 @@ NeuroKavach explores whether wearable physiological sensing and Edge AI can iden
 
 - Multimodal physiological sensing
 - Edge AI inference
-- Personalized baseline learning
+- Personalised baseline learning
 - Real-time haptic intervention
 - Companion mobile application
 - Human-in-the-loop feedback
@@ -180,19 +180,9 @@ This repository also hosts the demonstration website developed to communicate th
 
 **Team ZeroStack**
 
-- Tirtharaj Bhattacharya
-- Samrat Sinha
-- Sudipto Mondal
-
----
-
-# References
-
-Research papers, datasets, and supporting literature used during the conceptual development of NeuroKavach are listed in:
-
-```
-docs/REFERENCES.md
-```
+- [Tirtharaj Bhattacharya](https://github.com/rascal46)
+- [Samrat Sinha](https://github.com/Samrat648)
+- [Sudipto Mondal](https://github.com/sudipto-mondal-05)
 
 ---
 
