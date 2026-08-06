@@ -1,36 +1,76 @@
 # NeuroKavach
 
-> **AI-assisted wearable concept for early intervention during Obsessive-Compulsive Disorder (OCD) episodes using multimodal physiological sensing, embedded AI, and real-time haptic feedback.**
+<p align="center">
+  <img src="media/logo.png" alt="NeuroKavach Logo" width="180"/>
+</p>
+
+<h1 align="center">NeuroKavach</h1>
 
 <p align="center">
-🥈 <b>2nd Place – Idea Manthan Ideathon</b>
+AI-assisted wearable concept for early intervention during <b>Obsessive-Compulsive Disorder (OCD)</b> episodes using multimodal physiological sensing, embedded AI, and real-time haptic feedback.
+</p>
+
+<p align="center">
+🥈 <b>Runner-Up (2nd Place) – Idea Manthan Ideathon</b>
 </p>
 
 ---
 
-## Demonstration
+# Demonstration
 
-🎥 **Proof of Concept Video**
+### 🌐 Live Demo Website
 
-> *https://drive.google.com/file/d/1yA4UbeEAseOrR9dZpwNQwavNxBQWztA7/view?usp=sharing*
+**https://neurokavach-1.onrender.com/dashboard**
 
-**Demo Website:** *https://neurokavach-1.onrender.com/dashboard*
+### 🎥 Proof of Concept Video
+
+**https://drive.google.com/file/d/1yA4UbeEAseOrR9dZpwNQwavNxBQWztA7/view?usp=sharing**
 
 > **Note:** The demonstration represents an early proof of concept created for the ideathon. It illustrates the proposed workflow and user experience rather than a clinically validated medical device.
 
 ---
 
-## Overview
+# Website Preview
 
-NeuroKavach is an engineering concept that explores how wearable technology and embedded artificial intelligence can support individuals experiencing Obsessive-Compulsive Disorder (OCD).
+## Dashboard
 
-The project proposes detecting the earliest physiological signs of a compulsive episode—referred to as **"Moment Zero"**—using wearable sensors and lightweight Edge AI. When such a state is detected, the device provides immediate haptic feedback to help users regain awareness before compulsive behaviour escalates.
+<p align="center">
+<img src="media/pic 1.png" width="900">
+</p>
 
-Rather than replacing therapy, NeuroKavach is envisioned as a digital therapeutic companion that complements evidence-based approaches such as **Exposure and Response Prevention (ERP).**
+<p align="center">
+<img src="media/pic 2.png" width="900">
+</p>
+
+<p align="center">
+<img src="media/pic 3.png" width="900">
+</p>
+
+## System Architecture
+
+<p align="center">
+<img src="media/architecture.png" width="900">
+</p>
+
+## Proposed Workflow
+
+<p align="center">
+<img src="media/workflow.png" width="900">
+</p>
 
 ---
 
-## Project Status
+# Overview
+
+NeuroKavach is an engineering concept exploring how wearable technology and embedded artificial intelligence can assist individuals experiencing **Obsessive-Compulsive Disorder (OCD)**.
+
+The project proposes detecting the earliest physiological indicators of a compulsive episode—referred to as **Moment Zero**—using wearable sensing and lightweight Edge AI. Once detected, the system delivers immediate, non-invasive haptic feedback to help users regain awareness before compulsive behaviour escalates.
+
+Rather than replacing therapy, NeuroKavach is envisioned as a digital therapeutic companion that complements evidence-based interventions such as **Exposure and Response Prevention (ERP).**
+
+---
+
+# Project Status
 
 **Current Stage:** Concept & Early Proof of Concept
 
@@ -42,13 +82,15 @@ This repository contains:
 - Proof-of-concept demonstration
 - Research references
 - System architecture
-- Future roadmap
+- Development roadmap
 
-NeuroKavach is **not yet a complete hardware or software implementation**. Hardware development, embedded firmware, AI model optimisation, and clinical validation remain future work.
+This project is **not yet a complete hardware or software implementation.**
+
+Hardware development, embedded firmware, AI model optimisation, and clinical validation remain future work.
 
 ---
 
-## The Problem
+# The Problem
 
 Obsessive-Compulsive Disorder (OCD) affects millions of people worldwide and is characterised by intrusive thoughts followed by repetitive compulsive behaviours.
 
@@ -60,33 +102,15 @@ NeuroKavach explores whether wearable physiological sensing and Edge AI can iden
 
 ---
 
-## Proposed System Workflow
+# Proposed Workflow
 
-```
-Physiological Signals
-        │
-        ▼
-Signal Conditioning
-        │
-        ▼
-Feature Extraction
-        │
-        ▼
-Embedded Edge AI
-        │
-        ▼
-Moment Zero Detection
-        │
-        ▼
-Precision Haptic Feedback
-        │
-        ▼
-User Regains Awareness
-```
+<p align="center">
+<img src="media/workflow.png" width="850">
+</p>
 
 ---
 
-## Proposed Features
+# Proposed Features
 
 - Multimodal physiological sensing
 - Edge AI inference
@@ -99,9 +123,9 @@ User Regains Awareness
 
 ---
 
-## Technology Exploration
+# Technology Exploration
 
-This concept explores the intersection of:
+The concept investigates the integration of:
 
 - Embedded Systems
 - Artificial Intelligence
@@ -115,52 +139,50 @@ This concept explores the intersection of:
 
 ---
 
-## Repository Structure
+# Website
 
-```
-NeuroKavach
-│
-├── README.md
-├── docs/
-│   ├── NeuroKavach_Presentation.pdf
-│   ├── REFERENCES.md
-│   └── PROJECT_EVOLUTION.md
-│
-├── media/
-│   ├── poc.mp4
-│   ├── demo.gif
-│   └── screenshots/
-│
-├── assets/
-│
-└── website/
-```
+This repository also hosts the demonstration website developed to communicate the NeuroKavach concept.
+
+### Built With
+
+- Python
+- Flask
+- HTML5
+- CSS3
+- Bootstrap
+- JavaScript
 
 ---
 
-## Roadmap
+# Development Roadmap
 
-### Current
-
-- ✅ Concept development
-- ✅ Literature review
-- ✅ System architecture
-- ✅ Project website
-- ✅ Proof-of-concept demonstration
-- ✅ Ideathon presentation
-
-### Future
-
-- ⬜ Embedded hardware prototype
-- ⬜ Wearable sensor integration
-- ⬜ Companion mobile application
-- ⬜ Edge AI deployment
-- ⬜ User testing
-- ⬜ Clinical collaboration
+| Phase | Status |
+|---------|:------:|
+| Concept Development | ✅ |
+| Literature Review | ✅ |
+| System Architecture | ✅ |
+| Website Development | ✅ |
+| Proof of Concept | ✅ |
+| Embedded Prototype | 🔄 Planned |
+| Wearable Sensor Integration | 🔄 Planned |
+| Edge AI Deployment | 🔄 Planned |
+| Companion Mobile Application | 🔄 Planned |
+| User Testing | 🔄 Planned |
+| Clinical Collaboration | 🔄 Planned |
 
 ---
 
-## Team
+# My Contributions
+
+- Conceived the NeuroKavach solution concept.
+- Researched wearable intervention strategies for OCD.
+- Designed the overall system workflow.
+- Contributed to the technical presentation and ideathon pitch.
+- Coordinated project documentation and repository structure.
+
+---
+
+# Team
 
 **Team ZeroStack**
 
@@ -170,26 +192,44 @@ NeuroKavach
 
 ---
 
-## Acknowledgements
+# References
 
-This project was inspired by ongoing research in wearable healthcare, embedded AI, and Just-in-Time Interventions (JITIs) for Obsessive-Compulsive Disorder.
+Research papers, datasets, and supporting literature used during the conceptual development of NeuroKavach are listed in:
 
-We gratefully acknowledge the publicly available datasets and research literature that informed the conceptual development of NeuroKavach.
+```
+docs/REFERENCES.md
+```
 
 ---
 
-## Disclaimer
+# Acknowledgements
+
+This project was inspired by ongoing research in:
+
+- Wearable Healthcare
+- Embedded Artificial Intelligence
+- Digital Therapeutics
+- Just-in-Time Interventions (JITIs)
+- Human-Centred Computing
+
+We gratefully acknowledge the publicly available research literature and datasets that informed the conceptual development of NeuroKavach.
+
+---
+
+# Disclaimer
 
 NeuroKavach is an educational and research-oriented engineering concept.
 
-It is **not** a medical device and is **not intended to diagnose, treat, cure, or prevent any medical condition**. The repository documents an ideation-stage project and should not be interpreted as clinical advice or a validated healthcare solution.
+It is **not** a medical device and is **not intended to diagnose, treat, cure, or prevent any medical condition**.
+
+The repository documents an ideation-stage project and should not be interpreted as clinical advice or a validated healthcare solution.
 
 ---
 
-## Copyright
+# Copyright
 
 © 2026 Team ZeroStack.
 
 All Rights Reserved.
 
-The documentation, visual assets, concept descriptions, and original project materials contained in this repository may not be reproduced or redistributed without prior written permission from the authors.
+The documentation, visual assets, concept descriptions, project website, and original project materials contained in this repository may not be reproduced, redistributed, or used to create derivative works without prior written permission from the authors.
